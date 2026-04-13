@@ -1,0 +1,83 @@
+{
+  "info": {
+    "_postman_id": "cf3a6d5a-e467-4d25-b4f8-b621f719e147",
+    "name": "test",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51730606",
+    "_collection_link": "https://go.postman.co/collection/51730606-cf3a6d5a-e467-4d25-b4f8-b621f719e147?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "code-request",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"phone_number\": 79520202290\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/users/request-api/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "users",
+            "request-api",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Verify",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"phone_number\": 79520202290,\r\n    \"code\":  8777\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/users/verify-api/",
+          "protocol": "http",
+          "host": [
+            "127",
+            "0",
+            "0",
+            "1"
+          ],
+          "port": "8000",
+          "path": [
+            "users",
+            "verify-api",
+            ""
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

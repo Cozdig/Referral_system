@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Профиль - Реферальная система</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .container { background: #f4f4f4; padding: 20px; border-radius: 5px; }
+        .info { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        input { width: 100%; padding: 10px; margin: 10px 0; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        .logout { background: #dc3545; }
+        .success { color: green; }
+        .error { color: red; }
+        ul { list-style: none; padding: 0; }
+        li { background: #e9ecef; margin: 5px 0; padding: 10px; border-radius: 3px; }
+        .invite-code { font-size: 24px; font-weight: bold; color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Профиль пользователя</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="info">
+            <h3>Номер телефона</h3>
+            <p><strong>{{ user.phone_number|default:"Не указан" }}</strong></p>
+        </div>
+
+        <div class="info">
+            <h3>Ваш инвайт-код</h3>
+            <p class="invite-code">{{ user.invite_code|default:"Не сгенерирован" }}</p>
+            <small>Поделитесь этим кодом с друзьями!</small>
+        </div>
+
+        <div class="info">
+            <h3>Активированный инвайт-код</h3>
+            <p>{% if user.activated_invite_code %}<strong>{{ user.activated_invite_code }}</strong>{% else %}Не активирован{% endif %}</p>
+
+            {% if not user.activated_invite_code %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" name="invite_code" placeholder="Введите инвайт-код друга" maxlength="6" required>
+                    <button type="submit">Активировать код</button>
+                </form>
+            {% endif %}
+        </div>
+
+        <div class="info">
+            <h3>Ваши рефералы ({{ referrals|length }})</h3>
+            {% if referrals %}
+                <ul>
+                    {% for referral in referrals %}
+                        <li>{{ referral.phone_number }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Пока нет рефералов</p>
+            {% endif %}
+        </div>
+
+        <form method="post" action="{% url 'logout' %}" style="margin-top: 20px;">
+            {% csrf_token %}
+            <button type="submit" class="logout">Выйти</button>
+        </form>
+    </div>
+</body>
+</html>

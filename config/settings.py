@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'referral',
+    'users',
+    "django_filters",
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +129,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.User'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
@@ -156,7 +160,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_USER_MODEL = "users.CustomUser"
+SMS_API_USER = os.getenv('SMS_API_USER', '')
+SMS_API_KEY = os.getenv('SMS_API_KEY', '')
+SMS_API_URL = os.getenv('SMS_API_URL', 'https://gate.smsaero.ru/v2/sms/')
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
