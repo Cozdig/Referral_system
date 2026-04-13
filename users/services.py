@@ -5,6 +5,7 @@ from django.conf import settings
 from celery import shared_task
 import time
 
+
 class SmsService:
     @staticmethod
     @shared_task
@@ -20,15 +21,15 @@ class SmsService:
                     json={
                         "number": phone_number,
                         "text": f"Ваш код подтверждения: {code}",
-                        "sign": "SMS Aero"
+                        "sign": "SMS Aero",
                     },
-                    timeout=10
+                    timeout=10,
                 )
 
                 result = response.json()
                 print(f"Ответ SMS Aero: {result}")
 
-                if response.status_code == 200 and result.get('success'):
+                if response.status_code == 200 and result.get("success"):
                     print(f"SMS отправлено на {phone_number}")
                     return result
                 else:
@@ -44,6 +45,7 @@ class SmsService:
         print(f"Код для {phone_number}: {code}")
         return {"success": True, "simulated": True}
 
+
 class AuthService:
     VERIFICATION_CODE_TTL = 300
 
@@ -54,7 +56,9 @@ class AuthService:
     @staticmethod
     def send_verification_code(phone_number):
         code = AuthService.generate_verification_code()
-        cache.set(f"auth_code:{phone_number}", code, timeout=AuthService.VERIFICATION_CODE_TTL)
+        cache.set(
+            f"auth_code:{phone_number}", code, timeout=AuthService.VERIFICATION_CODE_TTL
+        )
         SmsService.send_sms.delay(phone_number, code)
         return True
 

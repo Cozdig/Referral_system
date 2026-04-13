@@ -1,4 +1,8 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+)
 from django.db import models
 import random
 import string
@@ -7,7 +11,7 @@ import string
 class UserManager(BaseUserManager):
     def create_user(self, phone_number, password=None, **extra_fields):
         if not phone_number:
-            raise ValueError('Phone number is required')
+            raise ValueError("Phone number is required")
 
         user = self.model(phone_number=phone_number, **extra_fields)
         if password:
@@ -18,9 +22,9 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, phone_number, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        extra_fields.setdefault("is_active", True)
 
         return self.create_user(phone_number, password, **extra_fields)
 
@@ -36,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'phone_number'
+    USERNAME_FIELD = "phone_number"
     REQUIRED_FIELDS = []
 
     def __str__(self):
@@ -44,22 +48,22 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def generate_invite_code(self):
         characters = string.digits + string.ascii_uppercase
-        code = ''.join(random.choices(characters, k=6))
+        code = "".join(random.choices(characters, k=6))
         while User.objects.filter(invite_code=code).exists():
-            code = ''.join(random.choices(characters, k=6))
+            code = "".join(random.choices(characters, k=6))
         self.invite_code = code
         self.save()
         return code
 
     def activate_invite_code(self, code):
         if self.activated_invite_code:
-            raise ValueError('Вы уже активировали инвайт-код')
+            raise ValueError("Вы уже активировали инвайт-код")
 
         if not User.objects.filter(invite_code=code).exists():
-            raise ValueError('Неверный инвайт-код')
+            raise ValueError("Неверный инвайт-код")
 
         if code == self.invite_code:
-            raise ValueError('Нельзя активировать свой собственный инвайт-код')
+            raise ValueError("Нельзя активировать свой собственный инвайт-код")
 
         self.activated_invite_code = code
         self.save()
@@ -69,6 +73,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         return User.objects.filter(activated_invite_code=self.invite_code)
 
     class Meta:
-        db_table = 'users'
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        db_table = "users"
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"

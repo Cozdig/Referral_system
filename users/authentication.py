@@ -6,7 +6,7 @@ User = get_user_model()
 
 class PhoneNumberAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        user_id = request.session.get('user_id')
+        user_id = request.session.get("user_id")
         if not user_id:
             return None
 

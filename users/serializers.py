@@ -23,8 +23,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'phone_number', 'invite_code', 'activated_invite_code',
-                  'has_activated_invite_code', 'referrals', 'created_at']
+        fields = [
+            "id",
+            "phone_number",
+            "invite_code",
+            "activated_invite_code",
+            "has_activated_invite_code",
+            "referrals",
+            "created_at",
+        ]
 
     def get_referrals(self, obj):
         return [user.phone_number for user in obj.get_referrals()]
